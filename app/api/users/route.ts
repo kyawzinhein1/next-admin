@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 // GET /api/users
 export async function GET() {
   try {
-    const users = await prisma.users.findMany();
+    const users = await prisma.user.findMany();
     return NextResponse.json(users, { status: 200 });
   } catch (error) {
     return NextResponse.json(
@@ -29,7 +29,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const newUser = await prisma.users.create({
+    const newUser = await prisma.user.create({
       data: { name, email, phone },
     });
 

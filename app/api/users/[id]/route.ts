@@ -5,10 +5,10 @@ const prisma = new PrismaClient();
 
 export async function GET(req: Request, context: { params: { id: string } }) {
   try {
-    const { id } = context.params;
+    const { id } = await context.params;
 
-    const user = await prisma.users.findUnique({
-      where: { id },
+    const user = await prisma.user.findUnique({
+      where: { id: Number(id) },
     });
 
     if (!user) {
@@ -30,7 +30,7 @@ export async function PUT(
 ) {
   try {
     const { name, email, phone } = await req.json();
-    const { id } = params;
+    const { id } = await params;
 
     if (!id || !name || !email || !phone) {
       return NextResponse.json(
@@ -39,8 +39,8 @@ export async function PUT(
       );
     }
 
-    const updatedUser = await prisma.users.update({
-      where: { id },
+    const updatedUser = await prisma.user.update({
+      where: { id: Number(id) },
       data: { name, email, phone },
     });
 
@@ -58,14 +58,14 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    const { id } = params;
-
+    const { id } = await params;
+    
     if (!id) {
       return NextResponse.json({ message: "ID is required." }, { status: 400 });
     }
 
-    const deletedUser = await prisma.users.delete({
-      where: { id },
+    const deletedUser = await prisma.user.delete({
+      where: { id: Number(id) },
     });
 
     return NextResponse.json(deletedUser, { status: 200 });
