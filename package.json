@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ant-design/compatible": "^5.1.4",
     "@prisma/client": "^6.5.0",
     "antd": "^5.24.3",
     "autoprefixer": "^10.4.21",
@@ -18,8 +19,8 @@
     "next": "15.2.2",
     "pg": "^8.14.0",
     "postcss": "^8.5.3",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.0.13",

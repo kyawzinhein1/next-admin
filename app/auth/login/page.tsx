@@ -1,10 +1,10 @@
-const login = () => {
-    return (
-        <section>
-            <h2>Login Page</h2>
-            <p>This is the login page</p>
-        </section>
-    );
+import React from "react";
+
+function Login() {
+  return <section>
+      <h2>Login Page</h2>
+      <p>This is the Login page</p>
+    </section>
 }
 
-export default login;
+export default Login;

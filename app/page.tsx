@@ -1,8 +1,6 @@
 "use client";
 
-import Button from "@/components/button";
 import { redirect } from "next/navigation";
-import React, { useEffect } from "react";
 
 const Page = () => {
   redirect("/auth/login");
