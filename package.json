@@ -14,6 +14,7 @@
     "antd": "^5.24.3",
     "autoprefixer": "^10.4.21",
     "bcryptjs": "^3.0.2",
+    "cookie": "^1.0.2",
     "dotenv": "^16.4.7",
     "jsonwebtoken": "^9.0.2",
     "next": "15.2.2",

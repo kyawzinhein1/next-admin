@@ -3,10 +3,11 @@
 import React, { useState } from "react";
 import { SettingOutlined, TeamOutlined, UserOutlined } from "@ant-design/icons";
 import type { MenuProps } from "antd";
-import { Layout, Menu } from "antd";
+import { Button, Layout, Menu, message } from "antd";
 import UserList from "@/components/userList";
 import Profile from "@/components/profile";
 import AdminList from "@/components/adminList";
+import { useRouter } from "next/navigation";
 
 const { Content, Sider } = Layout;
 const menuItems: MenuProps["items"] = [
@@ -29,10 +30,21 @@ const menuItems: MenuProps["items"] = [
 
 const Dashboard: React.FC = () => {
   const [selectedKey, setSelectedKey] = useState("");
+  const router = useRouter();
 
   const handleMenuClick = (e: any) => {
     setSelectedKey(e.key);
   };
+
+  const handleLogout = async () => {
+  const res = await fetch("/api/auth/logout", {
+    method: "POST",
+  });
+
+  if (res.ok) {
+    router.push("/auth/login");
+  }
+};
 
   const renderContent = () => {
     if (selectedKey === "1") {
@@ -65,6 +77,9 @@ const Dashboard: React.FC = () => {
             />
           </Sider>
           <Content style={{ padding: "0 24px", minHeight: 280 }}>
+            <Button type="primary" onClick={handleLogout}>
+              Logout
+            </Button>
             {renderContent()}
           </Content>
         </Layout>

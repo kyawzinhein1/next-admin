@@ -115,7 +115,7 @@ const UserList = () => {
           <Button type="primary" onClick={() => handleEdit(record)}>
             Edit
           </Button>
-          <Button type="primary" danger onClick={()=>handleDelete(record.id)}>
+          <Button type="primary" danger onClick={() => handleDelete(record.id)}>
             Delete
           </Button>
         </Flex>

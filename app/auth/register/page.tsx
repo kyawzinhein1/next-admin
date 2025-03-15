@@ -9,18 +9,14 @@ const Login: React.FC = () => {
     <Flex
       justify="center"
       align="center"
-      className="h-screen w-full bg-gray-100"
+      style={{ height: "100vh", backgroundColor: "#f5f5f5" }}
     >
       <Form
         name="login"
         initialValues={{ remember: true }}
-        style={{ maxWidth: 500 }}
+        style={{ maxWidth: 360, width: "100%" }}
       >
-        <Form.Item>
-          <p className="text-2xl font-bold text-center">
-            Welcome Administrator
-          </p>
-        </Form.Item>
+        <p className="text-xl font-bold text-center">Welcome</p>
         <Form.Item
           name="name"
           rules={[{ required: true, message: "Please input your username!" }]}
