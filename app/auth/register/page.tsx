@@ -1,10 +1,42 @@
 "use client";
 
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input, message } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import Flex from "antd/es/flex";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
-const Login: React.FC = () => {
+const Register: React.FC = () => {
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+
+  const onFinish = async (values: any) => {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        message.success(data.message);
+        router.push("/auth/login");
+      } else {
+        message.error(data.message);
+      }
+    } catch (error) {
+      console.error("Register error:", error);
+      message.error("Something went wrong!");
+    } finally {
+      setLoading(false);
+    }
+  };
+  
   return (
     <Flex
       justify="center"
@@ -12,7 +44,8 @@ const Login: React.FC = () => {
       style={{ height: "100vh", backgroundColor: "#f5f5f5" }}
     >
       <Form
-        name="login"
+        name="register"
+        onFinish={onFinish}
         initialValues={{ remember: true }}
         style={{ maxWidth: 360, width: "100%" }}
       >
@@ -40,7 +73,7 @@ const Login: React.FC = () => {
           />
         </Form.Item>
         <Form.Item>
-          <Button block type="primary" htmlType="submit">
+          <Button block type="primary" htmlType="submit" loading={loading}>
             Register
           </Button>
           or <a href="/auth/login">Login now!</a>
@@ -50,4 +83,4 @@ const Login: React.FC = () => {
   );
 };
 
-export default Login;
+export default Register;

@@ -62,20 +62,10 @@ const Login: React.FC = () => {
           <Input.Password prefix={<LockOutlined />} placeholder="Password" />
         </Form.Item>
         <Form.Item>
-          <Flex justify="space-between" align="center">
-            <Form.Item
-              name="remember"
-              valuePropName="checked"
-              noStyle
-            ></Form.Item>
-            <a href="/auth/register">Register</a>
-            <a href="#">Forgot password?</a>
-          </Flex>
-        </Form.Item>
-        <Form.Item>
           <Button block type="primary" htmlType="submit" loading={loading}>
             Log in
           </Button>
+          or <a href="/auth/register">Register now!</a>
         </Form.Item>
       </Form>
     </Flex>
