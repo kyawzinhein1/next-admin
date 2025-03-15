@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Button, Checkbox, Flex, Form, Input, message } from "antd";
+import { Button, Flex, Form, Input, message } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
 
