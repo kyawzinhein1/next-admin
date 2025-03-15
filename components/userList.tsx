@@ -21,6 +21,9 @@ const UserList = () => {
   const [editingUser, setEditingUser] = useState<UserType | null>(null);
   const [creatingUser, setCreatingUser] = useState(false);
 
+  // pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+
   const fetchUsers = async () => {
     setLoading(true);
     const response = await fetch("/api/users");
@@ -83,9 +86,9 @@ const UserList = () => {
 
   const columns: TableColumnsType<UserType> = [
     {
-      title: "Id",
-      dataIndex: "id",
-      key: "id",
+      title: "No",
+      dataIndex: "key",
+      render: (_text, _record, index) => (currentPage - 1) * 5 + index + 1,
     },
     {
       title: "Name",
@@ -136,6 +139,11 @@ const UserList = () => {
             columns={columns}
             dataSource={users}
             loading={loading}
+            pagination={{
+              pageSize: 5,
+              current: currentPage,
+              onChange: (page) => setCurrentPage(page), // Track current page
+            }}
           />
         </>
       )}

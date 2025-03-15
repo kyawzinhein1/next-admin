@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Button, Flex, Form, Input, message } from "antd";
+import { Button, Flex, Form, Input } from "antd";
+import message from "antd/es/message";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
 
@@ -22,11 +23,11 @@ const Login: React.FC = () => {
 
       const data = await res.json();
 
-      if (res.ok) {
+      if (res.status === 200) {
         message.success(data.message);
         router.push("/dashboard");
       } else {
-        message.error(data.message);
+        message.error(data.message || "An error occurred. Please try again.");
       }
     } catch (error) {
       console.error("Login error:", error);

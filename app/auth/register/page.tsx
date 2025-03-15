@@ -1,6 +1,7 @@
 "use client";
 
-import { Button, Form, Input, message } from "antd";
+import { Button, Form, Input } from "antd";
+import message from "antd/es/message";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import Flex from "antd/es/flex";
 import { useRouter } from "next/navigation";
