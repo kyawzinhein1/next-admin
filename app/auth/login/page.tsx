@@ -5,10 +5,13 @@ import { Button, Flex, Form, Input } from "antd";
 import message from "antd/es/message";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
+import { useAdminStore } from "@/store/adminStore";
 
 const Login: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+
+  const { setAdmin } = useAdminStore();
 
   const onFinish = async (values: any) => {
     setLoading(true);
@@ -25,7 +28,8 @@ const Login: React.FC = () => {
 
       if (res.status === 200) {
         message.success(data.message);
-        localStorage.setItem("token", data.token); 
+        localStorage.setItem("token", data.token);
+        setAdmin(data.admin);
         router.push("/dashboard");
       } else {
         message.error(data.message || "An error occurred. Please try again.");

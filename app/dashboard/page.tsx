@@ -7,8 +7,6 @@ import { Button, Layout, Menu, message } from "antd";
 import UserList from "@/components/userList";
 import Profile from "@/components/profile";
 import AdminList from "@/components/adminList";
-import { useRouter } from "next/navigation";
-
 
 const { Content, Sider } = Layout;
 const menuItems: MenuProps["items"] = [

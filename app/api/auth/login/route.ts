@@ -29,16 +29,22 @@ export async function POST(req: Request) {
       );
     }
 
-    const token = jwt.sign({ adminEmail: admin.email }, process.env.JWT_SECRET!, {
-      expiresIn: "1d",
-    });
-
-    const { password: _, ...adminData } = admin;
+    const token = jwt.sign(
+      { adminEmail: admin.email },
+      process.env.JWT_SECRET!,
+      {
+        expiresIn: "1d",
+      }
+    );
 
     const response = NextResponse.json(
       {
         message: "Login Success",
-        admin: adminData,
+        admin: {
+          name: admin.name,
+          email: admin.email,
+          role: admin.role,
+        },
         token,
       },
       { status: 200 }
