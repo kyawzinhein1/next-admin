@@ -25,6 +25,9 @@ const AdminList = () => {
   // pagination state
   const [currentPage, setCurrentPage] = useState(1);
 
+  // check component mounted state
+  const [isMounted, setIsMounted] = useState(false);
+
   const fetchAdmins = async () => {
     setLoading(true);
     const response = await fetch("/api/auth/admins");
@@ -44,8 +47,13 @@ const AdminList = () => {
   };
 
   useEffect(() => {
+    setIsMounted(true);
     fetchAdmins();
-  }, [editingAdmin?.id]);
+
+    return () => {
+      setIsMounted(false);
+    };
+  }, [editingAdmin]);
 
   const handleEdit = (record: AdminType) => {
     setEditingAdmin(record);

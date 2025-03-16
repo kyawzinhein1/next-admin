@@ -21,6 +21,14 @@ export async function POST(req: Request) {
       );
     }
 
+    // Check if the admin is banned
+    if (admin.isBan) {
+      return NextResponse.json(
+        { message: "Your account has been banned. Please contact support." },
+        { status: 403 } // Forbidden status code
+      );
+    }
+
     const isPasswordValid = await bcrypt.compare(password, admin.password);
     if (!isPasswordValid) {
       return NextResponse.json(
@@ -44,6 +52,7 @@ export async function POST(req: Request) {
           name: admin.name,
           email: admin.email,
           role: admin.role,
+          isBan: admin.isBan,
         },
         token,
       },
@@ -59,6 +68,7 @@ export async function POST(req: Request) {
     });
 
     return response;
+
   } catch (error) {
     console.error("Error during login:", error);
     return NextResponse.json(

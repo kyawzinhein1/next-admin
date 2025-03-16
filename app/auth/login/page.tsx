@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Button, Flex, Form, Input } from "antd";
-import message from "antd/es/message";
+import { Button, Flex, Form, Input, message } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
 import { useAdminStore } from "@/store/adminStore";
@@ -26,8 +25,14 @@ const Login: React.FC = () => {
 
       const data = await res.json();
 
+      // Debugging: Log the response data to verify it's correct
+      console.log("Login Response Data:", data);
+
       if (res.status === 200) {
-        message.success(data.message);
+        // Show the success message with a slight delay to ensure render
+        setTimeout(() => {
+          message.success(data.message);
+        }, 100); // Delay for a smoother experience
         localStorage.setItem("token", data.token);
         setAdmin(data.admin);
         router.push("/dashboard");
