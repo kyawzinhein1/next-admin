@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Button, Flex, message, Table } from "antd";
+import { Button, Flex, Input, message, Table } from "antd";
 import type { TableColumnsType } from "antd";
 import UserEditForm from "./userEditForm";
 import UserCreateForm from "./userCreateForm";
@@ -18,9 +18,11 @@ interface UserType {
 
 const UserList = () => {
   const [users, setUsers] = useState<UserType[]>([]);
+  const [filterUser, setFilterUser] = useState<UserType[]>([]);
   const [loading, setLoading] = useState(false);
   const [editingUser, setEditingUser] = useState<UserType | null>(null);
   const [creatingUser, setCreatingUser] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const { admin } = useAdminStore();
 
@@ -42,6 +44,7 @@ const UserList = () => {
     }));
 
     setUsers(formattedData);
+    setFilterUser(formattedData);
     setLoading(false);
   };
 
@@ -87,6 +90,19 @@ const UserList = () => {
     }
   };
 
+  // search handler
+  const handleSearch = (value: string) => {
+    setSearchQuery(value);
+
+    const filterData = users.filter(
+      (user) =>
+        user.name.toLowerCase().includes(value.toLowerCase()) ||
+        user.phone.toLowerCase().includes(value.toLowerCase())
+    );
+
+    setFilterUser(filterData);
+  };
+
   const columns: TableColumnsType<UserType> = [
     {
       title: "No",
@@ -97,6 +113,7 @@ const UserList = () => {
       title: "Name",
       dataIndex: "name",
       key: "name",
+      sorter: (a, b) => a.name.localeCompare(b.name),
     },
     {
       title: "Email",
@@ -112,25 +129,30 @@ const UserList = () => {
       title: "Created At",
       dataIndex: "createdAt",
       key: "createdAt",
+      sorter: (a, b) =>
+        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
     },
     {
       title: "Action",
       key: "action",
-      render: (_, record) => (
-        <Flex gap="middle">
-          <Button type="primary" onClick={() => handleEdit(record)}>
-            Edit
-          </Button>
-          <Button
-            type="primary"
-            danger
-            onClick={() => handleDelete(record.id)}
-            disabled={admin?.role !== "admin"}
-          >
-            Delete
-          </Button>
-        </Flex>
-      ),
+      render: (_, record) =>
+        editingUser || creatingUser ? null : (
+          <>
+            <Flex gap="middle">
+              <Button type="primary" onClick={() => handleEdit(record)}>
+                Edit
+              </Button>
+              <Button
+                type="primary"
+                danger
+                onClick={() => handleDelete(record.id)}
+                disabled={admin?.role !== "admin"}
+              >
+                Delete
+              </Button>
+            </Flex>
+          </>
+        ),
     },
   ];
 
@@ -141,17 +163,28 @@ const UserList = () => {
           <h2 className="text-xl font-semibold">User Management</h2>
         )}
         {!editingUser && !creatingUser && (
-          <Button type="primary" onClick={handleCreateFormOpen}>
-            Create
-          </Button>
+          <div className="flex gap-3">
+            <Input
+              placeholder="Search ..."
+              value={searchQuery}
+              onChange={(e) => handleSearch(e.target.value)}
+              allowClear
+              className="mb-4"
+            />
+
+            <Button type="primary" onClick={handleCreateFormOpen}>
+              Create
+            </Button>
+          </div>
         )}
       </div>
+
       <Flex gap="middle" vertical>
         {!editingUser && !creatingUser && (
           <>
             <Table<UserType>
               columns={columns}
-              dataSource={users}
+              dataSource={filterUser}
               loading={loading}
               pagination={{
                 pageSize: 5,

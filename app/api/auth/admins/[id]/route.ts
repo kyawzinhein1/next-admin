@@ -10,14 +10,17 @@ export async function PUT(
   try {
     const { name, email, role } = await req.json();
 
-    const adminId = Number(params.id);
+    const { id } = await params;
 
-    if (isNaN(adminId)) {
-      return NextResponse.json({ message: "Invalid ID" }, { status: 400 });
+    if (!id || !name || !email || !role) {
+      return NextResponse.json(
+        { message: "All field required" },
+        { status: 400 }
+      );
     }
 
     const updatedAdmin = await prisma.admin.update({
-      where: { id: adminId },
+      where: { id: Number(id) },
       data: { name, email, role },
     });
 
