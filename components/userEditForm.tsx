@@ -67,7 +67,7 @@ const UserEditForm: React.FC<UserEditFormProps> = ({ editingUser, onClose }) => 
       onFinish={handleSubmit}
     >
       <Form.Item>
-        <h1 className="text-2xl font-bold text-center">Edit User Information</h1>
+        <h1 className="text-xl font-semibold mb-6 text-center">Edit User Information</h1>
       </Form.Item>
       <Form.Item<FieldType>
         label="Name"

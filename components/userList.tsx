@@ -5,6 +5,7 @@ import { Button, Flex, message, Table } from "antd";
 import type { TableColumnsType } from "antd";
 import UserEditForm from "./userEditForm";
 import UserCreateForm from "./userCreateForm";
+import { useAdminStore } from "@/store/adminStore";
 
 interface UserType {
   key: React.Key;
@@ -20,6 +21,8 @@ const UserList = () => {
   const [loading, setLoading] = useState(false);
   const [editingUser, setEditingUser] = useState<UserType | null>(null);
   const [creatingUser, setCreatingUser] = useState(false);
+
+  const { admin } = useAdminStore();
 
   // pagination state
   const [currentPage, setCurrentPage] = useState(1);
@@ -118,7 +121,12 @@ const UserList = () => {
           <Button type="primary" onClick={() => handleEdit(record)}>
             Edit
           </Button>
-          <Button type="primary" danger onClick={() => handleDelete(record.id)}>
+          <Button
+            type="primary"
+            danger
+            onClick={() => handleDelete(record.id)}
+            disabled={admin?.role !== "admin"}
+          >
             Delete
           </Button>
         </Flex>
@@ -129,7 +137,9 @@ const UserList = () => {
   return (
     <div className="mt-4">
       <div className="flex justify-between mb-4">
-        <h2 className="text-xl font-semibold">User Management</h2>
+        {!editingUser && (
+          <h2 className="text-xl font-semibold">User Management</h2>
+        )}
         {!editingUser && !creatingUser && (
           <Button type="primary" onClick={handleCreateFormOpen}>
             Create

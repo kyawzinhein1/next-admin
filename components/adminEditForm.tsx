@@ -70,7 +70,7 @@ const AdminEditForm: React.FC<AdminEditFormProps> = ({
       onFinish={handleSubmit}
     >
       <Form.Item>
-        <h1 className="text-2xl font-bold text-center">
+        <h1 className="text-xl font-semibold mb-6 text-center">
           Edit Admin Information
         </h1>
       </Form.Item>

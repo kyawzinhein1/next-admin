@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Button, Flex, Table } from "antd";
 import type { TableColumnsType } from "antd";
 import AdminEditForm from "./adminEditForm";
+import { useAdminStore } from "@/store/adminStore";
 
 interface AdminType {
   key: React.Key;
@@ -17,6 +18,8 @@ const AdminList = () => {
   const [admins, setAdmins] = useState<AdminType[]>([]);
   const [loading, setLoading] = useState(false);
   const [editingAdmin, setEditingAdmin] = useState<AdminType | null>(null);
+
+  const { admin } = useAdminStore();
 
   // pagination state
   const [currentPage, setCurrentPage] = useState(1);
@@ -76,7 +79,11 @@ const AdminList = () => {
       key: "action",
       render: (_, record) => (
         <Flex gap="middle">
-          <Button type="primary" onClick={() => handleEdit(record)}>
+          <Button
+            type="primary"
+            onClick={() => handleEdit(record)}
+            disabled={admin?.role !== "admin"}
+          >
             Edit
           </Button>
         </Flex>
@@ -86,7 +93,9 @@ const AdminList = () => {
 
   return (
     <div className="mt-4">
-      <h2 className="text-xl font-semibold mb-6">Admin Management</h2>
+      {!editingAdmin && (
+        <h2 className="text-xl font-semibold mb-6">Admin Management</h2>
+      )}{" "}
       <Flex gap="middle" vertical>
         {!editingAdmin && (
           <Table<AdminType>
