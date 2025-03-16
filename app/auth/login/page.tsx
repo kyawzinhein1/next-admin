@@ -25,6 +25,7 @@ const Login: React.FC = () => {
 
       if (res.status === 200) {
         message.success(data.message);
+        localStorage.setItem("token", data.token); 
         router.push("/dashboard");
       } else {
         message.error(data.message || "An error occurred. Please try again.");
