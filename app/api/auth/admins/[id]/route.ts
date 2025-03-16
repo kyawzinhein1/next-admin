@@ -8,20 +8,20 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
-    const { name, email, role } = await req.json();
+    const { name, email, role, isBan } = await req.json();
 
     const { id } = await params;
 
-    if (!id || !name || !email || !role) {
+    if (!id) {
       return NextResponse.json(
-        { message: "All field required" },
+        { message: "Not found" },
         { status: 400 }
       );
     }
 
     const updatedAdmin = await prisma.admin.update({
       where: { id: Number(id) },
-      data: { name, email, role },
+      data: { name, email, role, isBan },
     });
 
     return NextResponse.json({

@@ -12,6 +12,7 @@ interface AdminType {
   name: string;
   email: string;
   role: string;
+  isBan: boolean;
 }
 
 const AdminList = () => {
@@ -35,6 +36,7 @@ const AdminList = () => {
       name: admin.name,
       email: admin.email,
       role: admin.role,
+      isBan: admin.isBan,
     }));
 
     setAdmins(formattedData);
@@ -51,6 +53,20 @@ const AdminList = () => {
 
   const handleCloseEditForm = () => {
     setEditingAdmin(null);
+  };
+
+  const handleToggleBan = async (adminId: string, currentStatus: boolean) => {
+    const response = await fetch(`/api/auth/admins/${adminId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ isBan: !currentStatus }),
+    });
+
+    if (response.ok) {
+      fetchAdmins();
+    }
   };
 
   const columns: TableColumnsType<AdminType> = [
@@ -75,18 +91,34 @@ const AdminList = () => {
       key: "role",
     },
     {
+      title: "Status",
+      dataIndex: "banned",
+      render: (banned) => (banned ? "Banned" : "Active"),
+    },
+    {
       title: "Action",
       key: "action",
       render: (_, record) => (
-        <Flex gap="middle">
-          <Button
-            type="primary"
-            onClick={() => handleEdit(record)}
-            disabled={admin?.role !== "admin"}
-          >
-            Edit
-          </Button>
-        </Flex>
+        <>
+          {!editingAdmin && (
+            <Flex gap="middle">
+              <Button
+                type="primary"
+                onClick={() => handleEdit(record)}
+                disabled={admin?.role !== "admin"}
+              >
+                Edit
+              </Button>
+              <Button
+                danger={record.isBan}
+                onClick={() => handleToggleBan(record.id, record.isBan)}
+                disabled={admin?.role !== "admin"}
+              >
+                {record.isBan ? "Unban" : "Ban"}
+              </Button>
+            </Flex>
+          )}
+        </>
       ),
     },
   ];
@@ -105,7 +137,7 @@ const AdminList = () => {
             pagination={{
               pageSize: 5,
               current: currentPage,
-              onChange: (page) => setCurrentPage(page), // Track current page
+              onChange: (page) => setCurrentPage(page),
             }}
           />
         )}
