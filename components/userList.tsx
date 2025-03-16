@@ -127,33 +127,41 @@ const UserList = () => {
   ];
 
   return (
-    <Flex gap="middle" vertical>
-      {!editingUser && !creatingUser && (
-        <>
-          <Flex align="center" gap="middle">
-            <Button type="primary" onClick={handleCreateFormOpen}>
-              Create
-            </Button>
-          </Flex>
-          <Table<UserType>
-            columns={columns}
-            dataSource={users}
-            loading={loading}
-            pagination={{
-              pageSize: 5,
-              current: currentPage,
-              onChange: (page) => setCurrentPage(page), // Track current page
-            }}
+    <div className="mt-4">
+      <div className="flex justify-between mb-4">
+        <h2 className="text-xl font-semibold">User Management</h2>
+        {!editingUser && !creatingUser && (
+          <Button type="primary" onClick={handleCreateFormOpen}>
+            Create
+          </Button>
+        )}
+      </div>
+      <Flex gap="middle" vertical>
+        {!editingUser && !creatingUser && (
+          <>
+            <Table<UserType>
+              columns={columns}
+              dataSource={users}
+              loading={loading}
+              pagination={{
+                pageSize: 5,
+                current: currentPage,
+                onChange: (page) => setCurrentPage(page), // Track current page
+              }}
+            />
+          </>
+        )}
+
+        {editingUser && (
+          <UserEditForm
+            editingUser={editingUser}
+            onClose={handleCloseEditForm}
           />
-        </>
-      )}
+        )}
 
-      {editingUser && (
-        <UserEditForm editingUser={editingUser} onClose={handleCloseEditForm} />
-      )}
-
-      {creatingUser && <UserCreateForm onClose={handleCloseCreateForm} />}
-    </Flex>
+        {creatingUser && <UserCreateForm onClose={handleCloseCreateForm} />}
+      </Flex>
+    </div>
   );
 };
 

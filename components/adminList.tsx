@@ -85,27 +85,30 @@ const AdminList = () => {
   ];
 
   return (
-    <Flex gap="middle" vertical>
-      {!editingAdmin && (
-        <Table<AdminType>
-          columns={columns}
-          dataSource={admins}
-          loading={loading}
-          pagination={{
-            pageSize: 5,
-            current: currentPage,
-            onChange: (page) => setCurrentPage(page), // Track current page
-          }}
-        />
-      )}
+    <div className="mt-4">
+      <h2 className="text-xl font-semibold mb-6">Admin Management</h2>
+      <Flex gap="middle" vertical>
+        {!editingAdmin && (
+          <Table<AdminType>
+            columns={columns}
+            dataSource={admins}
+            loading={loading}
+            pagination={{
+              pageSize: 5,
+              current: currentPage,
+              onChange: (page) => setCurrentPage(page), // Track current page
+            }}
+          />
+        )}
 
-      {editingAdmin && (
-        <AdminEditForm
-          editingAdmin={editingAdmin}
-          onClose={handleCloseEditForm}
-        />
-      )}
-    </Flex>
+        {editingAdmin && (
+          <AdminEditForm
+            editingAdmin={editingAdmin}
+            onClose={handleCloseEditForm}
+          />
+        )}
+      </Flex>
+    </div>
   );
 };
 
