@@ -7,6 +7,7 @@ import { Button, Layout, Menu, message } from "antd";
 import UserList from "@/components/userList";
 import Profile from "@/components/profile";
 import AdminList from "@/components/adminList";
+import Navigation from "@/components/navigation";
 
 const { Content, Sider } = Layout;
 const menuItems: MenuProps["items"] = [
@@ -47,10 +48,11 @@ const Dashboard: React.FC = () => {
 
   return (
     <Layout>
-      <div style={{ padding: "0 48px" }}>
+      <div>
+        <Navigation />
         <Layout
           style={{
-            padding: "24px 0",
+            padding: "16px 0",
             background: "#fff",
             borderRadius: "8px",
           }}
