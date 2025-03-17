@@ -24,7 +24,7 @@ export async function POST(req: Request) {
     // Check if the admin is banned
     if (admin.isBan) {
       return NextResponse.json(
-        { message: "Your account has been banned. Please contact support." },
+        { message: "Your account has been banned. Please contact to admin." },
         { status: 403 } // Forbidden status code
       );
     }

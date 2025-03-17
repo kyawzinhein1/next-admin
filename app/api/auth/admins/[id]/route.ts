@@ -15,7 +15,7 @@ export async function PUT(
     if (!id) {
       return NextResponse.json(
         { message: "Not found" },
-        { status: 400 }
+        { status: 404 }
       );
     }
 

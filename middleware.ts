@@ -7,7 +7,7 @@ const secretKey = new TextEncoder().encode(process.env.JWT_SECRET!);
 export async function middleware(req: NextRequest) {
   const token = req.cookies.get("token")?.value || "";
   const isLoginPage = req.nextUrl.pathname === "/auth/login";
-  const isDashboard = req.nextUrl.pathname.startsWith("/dashboard");
+  // const isDashboard = req.nextUrl.pathname.startsWith("/dashboard");
 
   try {
     if (token) {
@@ -16,20 +16,18 @@ export async function middleware(req: NextRequest) {
       if (isLoginPage) {
         return NextResponse.redirect(new URL("/dashboard", req.url));
       }
-      return NextResponse.next(); // Allow access to dashboard
+      return NextResponse.next();
       
     } else {
       if (isLoginPage) {
         return NextResponse.next();
       }
 
-      // ❌ Redirect to login page when trying to access the dashboard
       return NextResponse.redirect(new URL("/auth/login", req.url));
     }
   } catch (err) {
     console.error("Invalid Token:", err);
 
-    // ❌ Clear invalid token and redirect to login
     const response = NextResponse.redirect(new URL("/auth/login", req.url));
     response.cookies.set("token", "", { maxAge: 0 });
     return response;
