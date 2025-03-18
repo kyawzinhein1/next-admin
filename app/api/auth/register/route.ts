@@ -31,9 +31,11 @@ export async function POST(req: Request) {
       },
     });
 
-    return NextResponse.json(newAdmin, { status: 201 });
+    return NextResponse.json(
+      { message: "Admin register successfully", newAdmin },
+      { status: 201 }
+    );
   } catch (error) {
-    console.error("Error registering admin:", error);
     return NextResponse.json(
       { message: "Internal server error" },
       { status: 500 }

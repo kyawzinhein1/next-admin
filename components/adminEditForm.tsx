@@ -1,7 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
-import { Button, Form, Input, message, Select } from "antd";
+import { Button, Form, Input, Select } from "antd";
+
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 type FieldType = {
   name?: string;
@@ -43,13 +46,13 @@ const AdminEditForm: React.FC<AdminEditFormProps> = ({
       const data = await response.json();
 
       if (response.ok) {
-        message.success("Admin updated successfully!");
+        toast.success("Admin updated successfully!");
         onClose(); // Close the form after successful update
       } else {
-        message.error(data.message || "Error updating admin");
+        toast.error(data.message || "Error updating admin");
       }
     } catch (error) {
-      message.error("Error updating admin");
+      toast.error("Error updating admin");
     } finally {
       setLoading(false);
     }

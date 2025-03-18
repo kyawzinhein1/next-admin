@@ -1,10 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { Button, Flex, Form, Input, message } from "antd";
+import { Button, Flex, Form, Input } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
 import { useAdminStore } from "@/store/adminStore";
+
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Login: React.FC = () => {
   const [loading, setLoading] = useState(false);
@@ -29,19 +32,16 @@ const Login: React.FC = () => {
       console.log("Login Response Data:", data);
 
       if (res.status === 200) {
-        // Show the success message with a slight delay to ensure render
-        setTimeout(() => {
-          message.success(data.message);
-        }, 100); // Delay for a smoother experience
-        localStorage.setItem("token", data.token);
+        toast.success(data.message);
+        // localStorage.setItem("token", data.token);
         setAdmin(data.admin);
         router.push("/dashboard");
       } else {
-        message.error(data.message || "An error occurred. Please try again.");
+        toast.error(data.message || "An error occurred. Please try again.");
       }
     } catch (error) {
       console.error("Login error:", error);
-      message.error("Something went wrong!");
+      toast.error("Something went wrong!");
     } finally {
       setLoading(false);
     }

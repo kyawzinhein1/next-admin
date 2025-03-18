@@ -1,11 +1,14 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Button, Flex, Input, message, Table } from "antd";
+import { Button, Flex, Input, Table } from "antd";
 import type { TableColumnsType } from "antd";
 import UserEditForm from "./userEditForm";
 import UserCreateForm from "./userCreateForm";
 import { useAdminStore } from "@/store/adminStore";
+
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface UserType {
   key: React.Key;
@@ -78,13 +81,16 @@ const UserList = () => {
       const data = await response.json();
 
       if (response.ok) {
-        message.success(data.message || "User deleted successfully");
-        setUsers((prevUsers) => prevUsers.filter((user) => user.id !== id)); // Remove the user from the state
+        toast.success(data.message || "User deleted successfully");
+        setUsers((prevUsers) => prevUsers.filter((user) => user.id !== id));
+        setFilterUser((prevUsers) =>
+          prevUsers.filter((user) => user.id !== id)
+        );
       } else {
-        message.error(data.message || "Error deleting user");
+        toast.error(data.message || "Error deleting user");
       }
     } catch (error) {
-      message.error("Error deleting user");
+      toast.error("Error deleting user");
     } finally {
       setLoading(false);
     }
@@ -146,6 +152,7 @@ const UserList = () => {
                 type="primary"
                 danger
                 onClick={() => handleDelete(record.id)}
+                loading={loading}
                 disabled={admin?.role !== "admin"}
               >
                 Delete

@@ -1,7 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
-import { Button, Form, Input, message } from "antd";
+import { Button, Form, Input } from "antd";
+
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 type FieldType = {
   name?: string;
@@ -40,13 +43,13 @@ const UserEditForm: React.FC<UserEditFormProps> = ({ editingUser, onClose }) => 
       const data = await response.json();
 
       if (response.ok) {
-        message.success("User updated successfully!");
+        toast.success("User updated successfully!");
         onClose(); // Close the form after successful update
       } else {
-        message.error(data.message || "Error updating user");
+        toast.error(data.message || "Error updating user");
       }
     } catch (error) {
-      message.error("Error updating user");
+      toast.error("Error updating user");
     } finally {
       setLoading(false);
     }

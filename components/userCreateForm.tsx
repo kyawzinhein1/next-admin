@@ -1,5 +1,8 @@
 import React, { useState } from "react";
-import { Button, Form, Input, message } from "antd";
+import { Button, Form, Input } from "antd";
+
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 type FieldType = {
   name?: string;
@@ -32,13 +35,13 @@ const UserCreateForm: React.FC<UserCreateFormProps> = ({ onClose }) => {
       const data = await response.json();
 
       if (response.ok) {
-        message.success("User created successfully!");
+        toast.success("User created successfully!");
         onClose(); // Close the form after successful creation
       } else {
-        message.error(data.message || "Error creating user");
+        toast.error(data.message || "Error creating user");
       }
     } catch (error) {
-      message.error("Error creating user");
+      toast.error("Error creating user");
     } finally {
       setLoading(false);
     }
