@@ -29,7 +29,7 @@ const Login: React.FC = () => {
       const data = await res.json();
 
       // Debugging: Log the response data to verify it's correct
-      console.log("Login Response Data:", data);
+      // console.log("Login Response Data:", data);
 
       if (res.status === 200) {
         toast.success(data.message);

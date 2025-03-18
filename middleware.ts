@@ -4,25 +4,27 @@ import { jwtVerify } from "jose";
 
 const secretKey = new TextEncoder().encode(process.env.JWT_SECRET!);
 
+const PUBLIC_ROUTES = ["/auth/login", "/auth/register"];
+
 export async function middleware(req: NextRequest) {
   const token = req.cookies.get("token")?.value || "";
-  const isLoginPage = req.nextUrl.pathname === "/auth/login";
-  // const isDashboard = req.nextUrl.pathname.startsWith("/dashboard");
+
+  const { pathname } = req.nextUrl;
+
+  if (PUBLIC_ROUTES.includes(pathname)) {
+    return NextResponse.next();
+  }
 
   try {
     if (token) {
       await jwtVerify(token, secretKey);
 
-      if (isLoginPage) {
+      if (pathname.startsWith("/auth/login")) {
         return NextResponse.redirect(new URL("/dashboard", req.url));
       }
-      return NextResponse.next();
-      
-    } else {
-      if (isLoginPage) {
-        return NextResponse.next();
-      }
 
+      return NextResponse.next();
+    } else {
       return NextResponse.redirect(new URL("/auth/login", req.url));
     }
   } catch (err) {

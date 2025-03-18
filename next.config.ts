@@ -1,6 +1,5 @@
 import { NextConfig } from "next";
 
-
 require("dotenv").config();
 
 const nextConfig: NextConfig = {
@@ -8,6 +7,7 @@ const nextConfig: NextConfig = {
     JWT_SECRET_KEY: process.env.JWT_SECRET,
   },
   reactStrictMode: false,
+  devIndicators: false,
 };
 
 export default nextConfig;
