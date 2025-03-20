@@ -2,6 +2,8 @@ import { Button } from "antd";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+import { LogoutOutlined } from "@ant-design/icons";
+
 export default function Navigation() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -28,8 +30,13 @@ export default function Navigation() {
       <a href="#" className="mt-2">
         <p className="font-2xl font-bold uppercase">My Admin</p>
       </a>
-      <Button type="primary" danger onClick={handleLogout} loading={loading}>
-        Logout
+      <Button
+        type="primary"
+        danger
+        onClick={handleLogout}
+        loading={loading}
+      >
+        <LogoutOutlined />Logout
       </Button>
     </div>
   );

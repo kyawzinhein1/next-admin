@@ -134,7 +134,7 @@ const AdminList = () => {
           {!editingAdmin && (
             <Flex gap="middle">
               <Button
-                type="primary"
+                style={{ borderColor: 'blue', color: 'blue' }}
                 onClick={() => handleEdit(record)}
                 hidden={admin?.role === "viewer"}
               >

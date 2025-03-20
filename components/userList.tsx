@@ -1,7 +1,12 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Button, Flex, Input, Table } from "antd";
+import { Button, Flex, Input, Modal, Table } from "antd";
+import {
+  EditOutlined,
+  DeleteOutlined,
+  PlusCircleOutlined,
+} from "@ant-design/icons";
 import type { TableColumnsType } from "antd";
 import UserEditForm from "./userEditForm";
 import UserCreateForm from "./userCreateForm";
@@ -26,6 +31,8 @@ const UserList = () => {
   const [editingUser, setEditingUser] = useState<UserType | null>(null);
   const [creatingUser, setCreatingUser] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [userToDelete, setUserToDelete] = useState<string | null>(null); // Track user to delete
 
   const { admin } = useAdminStore();
 
@@ -71,29 +78,45 @@ const UserList = () => {
     setCreatingUser(false); // Close the create form
   };
 
-  const handleDelete = async (id: string) => {
-    setLoading(true);
-    try {
-      const response = await fetch(`/api/users/${id}`, {
-        method: "DELETE",
-      });
+  const handleDelete = async () => {
+    if (userToDelete) {
+      setLoading(true);
+      try {
+        const response = await fetch(`/api/users/${userToDelete}`, {
+          method: "DELETE",
+        });
 
-      const data = await response.json();
+        const data = await response.json();
 
-      if (response.ok) {
-        toast.success(data.message || "User deleted successfully");
-        setUsers((prevUsers) => prevUsers.filter((user) => user.id !== id));
-        setFilterUser((prevUsers) =>
-          prevUsers.filter((user) => user.id !== id)
-        );
-      } else {
-        toast.error(data.message || "Error deleting user");
+        if (response.ok) {
+          toast.success(data.message || "User deleted successfully");
+          setUsers((prevUsers) =>
+            prevUsers.filter((user) => user.id !== userToDelete)
+          );
+          setFilterUser((prevUsers) =>
+            prevUsers.filter((user) => user.id !== userToDelete)
+          );
+        } else {
+          toast.error(data.message || "Error deleting user");
+        }
+      } catch (error) {
+        toast.error("Error deleting user");
+      } finally {
+        setLoading(false);
+        setIsModalVisible(false); // Close the modal
+        setUserToDelete(null); // Clear the user to delete
       }
-    } catch (error) {
-      toast.error("Error deleting user");
-    } finally {
-      setLoading(false);
     }
+  };
+
+  const showDeleteModal = (id: string) => {
+    setUserToDelete(id); // Store the user ID to delete
+    setIsModalVisible(true); // Show the modal
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false); // Close the modal without deleting
+    setUserToDelete(null); // Clear the user to delete
   };
 
   // search handler
@@ -145,15 +168,21 @@ const UserList = () => {
         editingUser || creatingUser ? null : (
           <>
             <Flex gap="middle">
-              <Button type="primary" onClick={() => handleEdit(record)}>
+              <Button
+                type="primary"
+                onClick={() => handleEdit(record)}
+                hidden={admin?.role === "viewer"}
+                icon={<EditOutlined />}
+              >
                 Edit
               </Button>
               <Button
                 type="primary"
                 danger
-                onClick={() => handleDelete(record.id)}
+                onClick={() => showDeleteModal(record.id)}
                 loading={loading}
-                disabled={admin?.role !== "admin"}
+                hidden={admin?.role !== "admin"}
+                icon={<DeleteOutlined />}
               >
                 Delete
               </Button>
@@ -179,7 +208,11 @@ const UserList = () => {
               className="mb-4"
             />
 
-            <Button type="primary" onClick={handleCreateFormOpen}>
+            <Button
+              type="primary"
+              onClick={handleCreateFormOpen}
+              icon={<PlusCircleOutlined />}
+            >
               Create
             </Button>
           </div>
@@ -211,6 +244,18 @@ const UserList = () => {
 
         {creatingUser && <UserCreateForm onClose={handleCloseCreateForm} />}
       </Flex>
+      
+      {/* Centered Modal for confirmation */}
+      <Modal
+        title="Confirm Deletion"
+        open={isModalVisible}
+        onOk={handleDelete} // Handle delete
+        onCancel={handleCancel} // Handle cancel
+        okText="Yes"
+        cancelText="No"
+      >
+        <p>Are you sure to delete this user?</p>
+      </Modal>
     </div>
   );
 };

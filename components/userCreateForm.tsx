@@ -4,6 +4,8 @@ import { Button, Form, Input } from "antd";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+import { SaveFilled, CloseCircleOutlined } from "@ant-design/icons";
+
 type FieldType = {
   name?: string;
   email?: string;
@@ -64,7 +66,7 @@ const UserCreateForm: React.FC<UserCreateFormProps> = ({ onClose }) => {
         name="name"
         rules={[{ required: true, message: "Please input the name!" }]}
       >
-        <Input />
+        <Input placeholder="Enter your name"/>
       </Form.Item>
 
       <Form.Item<FieldType>
@@ -72,7 +74,7 @@ const UserCreateForm: React.FC<UserCreateFormProps> = ({ onClose }) => {
         name="email"
         rules={[{ required: true, message: "Please input the email!" }]}
       >
-        <Input />
+        <Input placeholder="Enter your email"/>
       </Form.Item>
 
       <Form.Item<FieldType>
@@ -80,14 +82,23 @@ const UserCreateForm: React.FC<UserCreateFormProps> = ({ onClose }) => {
         name="phone"
         rules={[{ required: true, message: "Please input the phone!" }]}
       >
-        <Input />
+        <Input placeholder="Enter your phone"/>
       </Form.Item>
 
       <Form.Item label={null}>
-        <Button type="primary" htmlType="submit" loading={loading}>
+        <Button
+          type="primary"
+          htmlType="submit"
+          loading={loading}
+          icon={<SaveFilled />}
+        >
           Create User
         </Button>
-        <Button style={{ marginLeft: "10px" }} onClick={onClose}>
+        <Button
+          style={{ marginLeft: "10px" }}
+          onClick={onClose}
+          icon={<CloseCircleOutlined />}
+        >
           Cancel
         </Button>
       </Form.Item>

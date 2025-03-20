@@ -6,6 +6,8 @@ import { Button, Form, Input } from "antd";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+import { SaveFilled, CloseCircleOutlined } from "@ant-design/icons";
+
 type FieldType = {
   name?: string;
   email?: string;
@@ -22,7 +24,10 @@ interface UserEditFormProps {
   onClose: () => void; // Close the form
 }
 
-const UserEditForm: React.FC<UserEditFormProps> = ({ editingUser, onClose }) => {
+const UserEditForm: React.FC<UserEditFormProps> = ({
+  editingUser,
+  onClose,
+}) => {
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (values: FieldType) => {
@@ -70,7 +75,9 @@ const UserEditForm: React.FC<UserEditFormProps> = ({ editingUser, onClose }) => 
       onFinish={handleSubmit}
     >
       <Form.Item>
-        <h1 className="text-xl font-semibold mb-6 text-center">Edit User Information</h1>
+        <h1 className="text-xl font-semibold mb-6 text-center">
+          Edit User Information
+        </h1>
       </Form.Item>
       <Form.Item<FieldType>
         label="Name"
@@ -97,10 +104,10 @@ const UserEditForm: React.FC<UserEditFormProps> = ({ editingUser, onClose }) => 
       </Form.Item>
 
       <Form.Item label={null}>
-        <Button type="primary" htmlType="submit" loading={loading}>
+        <Button type="primary" htmlType="submit" loading={loading} icon={<SaveFilled/>}>
           Submit
         </Button>
-        <Button style={{ marginLeft: "10px" }} onClick={onClose}>
+        <Button style={{ marginLeft: "10px" }} onClick={onClose} icon={<CloseCircleOutlined/>}>
           Cancel
         </Button>
       </Form.Item>
