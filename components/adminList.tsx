@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Button, Flex, Table } from "antd";
+import { Button, Flex, Table, Input } from "antd";
 import type { TableColumnsType } from "antd";
 import AdminEditForm from "./adminEditForm";
 import { useAdminStore } from "@/store/adminStore";
@@ -19,6 +19,7 @@ const AdminList = () => {
   const [admins, setAdmins] = useState<AdminType[]>([]);
   const [loading, setLoading] = useState(false);
   const [editingAdmin, setEditingAdmin] = useState<AdminType | null>(null);
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
   const { admin } = useAdminStore();
 
@@ -77,6 +78,21 @@ const AdminList = () => {
     }
   };
 
+  const handleSearch = (value: string) => {
+    setSearchQuery(value);
+  };
+
+  // Filter admins based on search query
+  const filteredAdmins = admins.filter((admin) => {
+    return (
+      admin.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      admin.role.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (admin.isBan ? "banned" : "active")
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase())
+    );
+  });
+
   const columns: TableColumnsType<AdminType> = [
     {
       title: "No",
@@ -87,6 +103,7 @@ const AdminList = () => {
       title: "Name",
       dataIndex: "name",
       key: "name",
+      sorter: (a, b) => a.name.localeCompare(b.name),
     },
     {
       title: "Email",
@@ -97,11 +114,17 @@ const AdminList = () => {
       title: "Role",
       dataIndex: "role",
       key: "role",
+      sorter: (a, b) => a.role.localeCompare(b.role),
     },
     {
       title: "Status",
-      dataIndex: "banned",
-      render: (banned) => (banned ? "Banned" : "Active"),
+      dataIndex: "isBan",
+      sorter: (a, b) => Number(a.isBan) - Number(b.isBan),
+      render: (isBan) => (
+        <span style={{ color: isBan ? "red" : "green", fontWeight: "bold" }}>
+          {isBan ? "Banned" : "Active"}
+        </span>
+      ),
     },
     {
       title: "Action",
@@ -113,14 +136,14 @@ const AdminList = () => {
               <Button
                 type="primary"
                 onClick={() => handleEdit(record)}
-                disabled={admin?.role !== "admin"}
+                hidden={admin?.role === "viewer"}
               >
                 Edit
               </Button>
               <Button
                 danger={record.isBan}
                 onClick={() => handleToggleBan(record.id, record.isBan)}
-                disabled={admin?.role !== "admin"}
+                hidden={admin?.role === "editor" || admin?.role === "viewer"}
               >
                 {record.isBan ? "Unban" : "Ban"}
               </Button>
@@ -133,14 +156,24 @@ const AdminList = () => {
 
   return (
     <div className="mt-4">
-      {!editingAdmin && (
-        <h2 className="text-xl font-semibold mb-6">Admin Management</h2>
-      )}{" "}
+      <div className="flex justify-between mb-6">
+        {!editingAdmin && (
+          <h2 className="text-xl font-semibold mb-6">Admin Management</h2>
+        )}
+        {!editingAdmin && (
+          <div>
+            <Input
+              placeholder="Search ..."
+              onChange={(e) => handleSearch(e.target.value)}
+            />
+          </div>
+        )}
+      </div>
       <Flex gap="middle" vertical>
         {!editingAdmin && (
           <Table<AdminType>
             columns={columns}
-            dataSource={admins}
+            dataSource={filteredAdmins}
             loading={loading}
             pagination={{
               pageSize: 5,

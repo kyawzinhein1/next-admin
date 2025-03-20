@@ -101,7 +101,7 @@ const AdminEditForm: React.FC<AdminEditFormProps> = ({
         <Select>
           <Select.Option value="admin">Admin</Select.Option>
           <Select.Option value="editor">Editor</Select.Option>
-          <Select.Option value="moderator">Moderator</Select.Option>
+          <Select.Option value="viewer">Viewer</Select.Option>
         </Select>
       </Form.Item>
 
